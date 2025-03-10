@@ -2,22 +2,19 @@ using System;
 
 public class Entry
 {
-    private string _date;
-    private string _promptText;
-    private string _entryText;
+    public string Date { get; set; }
+    public string Prompt { get; set; }
+    public string Response { get; set; }
 
-    public Entry(string date, string promptText, string entryText)
+    public Entry(string date, string prompt, string response)
     {
-        _date = date;
-        _promptText = promptText;
-        _entryText = entryText;
+        Date = date;
+        Prompt = prompt;
+        Response = response;
     }
 
-    public void Display()
+    public override string ToString()
     {
-        Console.WriteLine($"Date: {_date}");
-        Console.WriteLine($"Prompt: {_promptText}");
-        Console.WriteLine($"Response: {_entryText}");
-        Console.WriteLine();
+        return $"Date: {Date}\nPrompt: {Prompt}\nResponse: {Response}\n";
     }
 }
