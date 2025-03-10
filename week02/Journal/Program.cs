@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 class Program
 {
@@ -59,11 +58,11 @@ class Program
 
                 case "5":
                     running = false;
-                    Console.WriteLine("Goodbye!\n");
+                    Console.WriteLine("\nGoodbye!");
                     break;
 
                 default:
-                    Console.WriteLine("Invalid option. Please try again.\n");
+                    Console.WriteLine("\nInvalid option. Please try again.\n");
                     break;
             }
         }
