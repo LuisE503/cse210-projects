@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json; 
 
 public class Journal
 {
@@ -15,35 +16,35 @@ public class Journal
     {
         foreach (Entry entry in _entries)
         {
-            entry.Display();
+            Console.WriteLine(entry);
         }
     }
 
-    public void SaveToFile(string fileName)
+    public void SaveToJson(string fileName)
     {
-        using (StreamWriter outputFile = new StreamWriter(fileName))
-        {
-            foreach (Entry entry in _entries)
-            {
-                outputFile.WriteLine($"{entry.Date}~|~{entry.Prompt}~|~{entry.Response}");
-            }
-        }
+        string jsonString = JsonSerializer.Serialize(_entries, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(fileName, jsonString);
     }
 
-    public void LoadFromFile(string fileName)
+    public void LoadFromJson(string fileName)
     {
-        string[] lines = File.ReadAllLines(fileName);
-        _entries.Clear();
+        string jsonString = File.ReadAllText(fileName);
+        _entries = JsonSerializer.Deserialize<List<Entry>>(jsonString);
+    }
 
-        foreach (string line in lines)
+    public void DisplayStatistics()
+    {
+        Console.WriteLine($"\nNumber of Entries: {_entries.Count}");
+        if (_entries.Count > 0)
         {
-            string[] parts = line.Split("~|~");
-            string date = parts[0];
-            string prompt = parts[1];
-            string response = parts[2];
-
-            Entry entry = new Entry(date, prompt, response);
-            _entries.Add(entry);
+            string earliestDate = _entries[0].Date;
+            string latestDate = _entries[_entries.Count - 1].Date;
+            Console.WriteLine($"Earliest Entry Date: {earliestDate}");
+            Console.WriteLine($"Latest Entry Date: {latestDate}");
+        }
+        else
+        {
+            Console.WriteLine("No entries available to calculate statistics.");
         }
     }
 }
