@@ -17,6 +17,11 @@ public class ScriptureLibrary
 
     public Scripture GetRandomScripture()
     {
+        if (_scriptures.Count == 0)
+        {
+            throw new InvalidOperationException("No scriptures available in the library.");
+        }
+
         Random random = new Random();
         int index = random.Next(_scriptures.Count);
         return _scriptures[index];
