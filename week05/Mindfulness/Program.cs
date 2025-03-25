@@ -6,8 +6,8 @@ class Program
     {
         Console.WriteLine("Mindfulness Program");
         Console.WriteLine("1. Breathing Activity");
-        Console.WriteLine("2. Reflection Activity (to be implemented)");
-        Console.WriteLine("3. Listing Activity (to be implemented)");
+        Console.WriteLine("2. Reflection Activity");
+        Console.WriteLine("3. Listing Activity");
         Console.WriteLine("4. Quit");
 
         bool running = true;
@@ -24,10 +24,12 @@ class Program
                     breathing.RunActivity();
                     break;
                 case "2":
-                    Console.WriteLine("Reflection Activity is under construction.");
+                    ReflectionActivity reflecting = new ReflectionActivity();
+                    reflecting.RunActivity();
                     break;
                 case "3":
-                    Console.WriteLine("Listing Activity is under construction.");
+                    ListingActivity listing = new ListingActivity();
+                    listing.RunActivity();
                     break;
                 case "4":
                     running = false;
