@@ -38,4 +38,7 @@ public class ChecklistGoal : Goal
         string status = IsCompleted() ? "[X]" : "[ ]";
         return $"{status} {base.GetDetails()} (Completed {_timesCompleted}/{_requiredTimes} times)";
     }
+
+    public int GetRequiredTimes() => _requiredTimes;
+    public int GetBonusPoints() => _bonusPoints;
 }
