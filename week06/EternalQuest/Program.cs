@@ -12,7 +12,7 @@ class Program
         bool running = true;
         while (running)
         {
-            Console.WriteLine("\nEternal Quest Program");
+            PrintHeader("Eternal Quest Program");
             Console.WriteLine("1. Create Goal");
             Console.WriteLine("2. Record Event");
             Console.WriteLine("3. Show Goals");
@@ -41,18 +41,30 @@ class Program
                     break;
                 case "6":
                     running = false;
-                    Console.WriteLine("Goodbye!");
+                    PrintHeader("Goodbye!");
                     break;
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid option. Please try again.");
+                    Console.ResetColor();
                     break;
             }
         }
     }
 
+    static void PrintHeader(string title)
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("\n===========================");
+        Console.WriteLine($"   {title}");
+        Console.WriteLine("===========================\n");
+        Console.ResetColor();
+    }
+
     static void CreateGoal(List<Goal> goals)
     {
-        Console.WriteLine("\n1. Simple Goal");
+        PrintHeader("Create a New Goal");
+        Console.WriteLine("1. Simple Goal");
         Console.WriteLine("2. Eternal Goal");
         Console.WriteLine("3. Checklist Goal");
         Console.Write("What type of goal would you like to create? ");
@@ -81,14 +93,17 @@ class Program
                 goals.Add(new ChecklistGoal(name, description, points, requiredTimes, bonusPoints));
                 break;
             default:
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid type.");
+                Console.ResetColor();
                 break;
         }
     }
 
     static int RecordEvent(List<Goal> goals)
     {
-        Console.WriteLine("\nSelect a goal to record an event:");
+        PrintHeader("Record an Event");
+        Console.WriteLine("Select a goal to record an event:");
         for (int i = 0; i < goals.Count; i++)
         {
             Console.WriteLine($"{i + 1}. {goals[i].GetDetails()}");
@@ -102,25 +117,26 @@ class Program
 
     static void ShowGoals(List<Goal> goals, int totalScore)
     {
-        Console.WriteLine("\nYour Goals:");
+        PrintHeader("Your Goals");
         foreach (Goal goal in goals)
         {
             Console.WriteLine(goal.GetDetails());
         }
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"\nTotal Score: {totalScore}");
+        Console.ResetColor();
     }
 
     static void SaveGoals(List<Goal> goals, int totalScore)
     {
+        PrintHeader("Save Goals");
         Console.Write("Enter the filename to save the goals: ");
         string fileName = Console.ReadLine();
 
         using (StreamWriter outputFile = new StreamWriter(fileName))
         {
-            // Guardar el puntaje total
             outputFile.WriteLine(totalScore);
 
-            // Guardar cada meta
             foreach (Goal goal in goals)
             {
                 string goalType = goal.GetType().Name; // Obtener el tipo de meta
@@ -138,12 +154,15 @@ class Program
                 outputFile.WriteLine(goalData);
             }
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Goals saved successfully!");
+            Console.ResetColor();
         }
     }
 
     static (List<Goal>, int) LoadGoals()
     {
+        PrintHeader("Load Goals");
         Console.Write("Enter the filename to load the goals: ");
         string fileName = Console.ReadLine();
 
@@ -152,10 +171,8 @@ class Program
 
         string[] lines = File.ReadAllLines(fileName);
 
-        // Leer el puntaje total
         totalScore = int.Parse(lines[0]);
 
-        // Leer cada meta
         for (int i = 1; i < lines.Length; i++)
         {
             string[] parts = lines[i].Split(':');
@@ -195,7 +212,9 @@ class Program
             }
         }
 
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Goals loaded successfully!");
+        Console.ResetColor();
         return (goals, totalScore);
     }
 }
