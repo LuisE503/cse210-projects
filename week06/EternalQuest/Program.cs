@@ -18,7 +18,8 @@ class Program
             Console.WriteLine("3. Show Goals");
             Console.WriteLine("4. Save Goals");
             Console.WriteLine("5. Load Goals");
-            Console.WriteLine("6. Quit");
+            Console.WriteLine("6. Show Statistics");
+            Console.WriteLine("7. Quit");
             Console.Write("Choose an option: ");
             string choice = Console.ReadLine();
 
@@ -40,6 +41,9 @@ class Program
                     (goals, totalScore) = LoadGoals();
                     break;
                 case "6":
+                    ShowStatistics(goals, totalScore);
+                    break;
+                case "7":
                     running = false;
                     PrintHeader("Goodbye!");
                     break;
@@ -136,12 +140,10 @@ class Program
         using (StreamWriter outputFile = new StreamWriter(fileName))
         {
             outputFile.WriteLine(totalScore);
-
             foreach (Goal goal in goals)
             {
-                string goalType = goal.GetType().Name; // Obtener el tipo de meta
+                string goalType = goal.GetType().Name;
                 string goalData = $"{goalType}:{goal.GetName()}:{goal.GetDescription()}:{goal.GetPoints()}";
-
                 if (goal is ChecklistGoal checklistGoal)
                 {
                     goalData += $":{checklistGoal.IsCompleted()}:{checklistGoal.GetRequiredTimes()}:{checklistGoal.GetBonusPoints()}";
@@ -150,10 +152,8 @@ class Program
                 {
                     goalData += $":{simpleGoal.IsCompleted()}";
                 }
-
                 outputFile.WriteLine(goalData);
             }
-
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Goals saved successfully!");
             Console.ResetColor();
@@ -170,7 +170,6 @@ class Program
         int totalScore = 0;
 
         string[] lines = File.ReadAllLines(fileName);
-
         totalScore = int.Parse(lines[0]);
 
         for (int i = 1; i < lines.Length; i++)
@@ -216,5 +215,34 @@ class Program
         Console.WriteLine("Goals loaded successfully!");
         Console.ResetColor();
         return (goals, totalScore);
+    }
+
+    static void ShowStatistics(List<Goal> goals, int totalScore)
+    {
+        PrintHeader("User Performance Statistics");
+
+        int completedGoals = 0;
+        int totalEternalEvents = 0; 
+        int totalGoals = goals.Count;
+
+        foreach (Goal goal in goals)
+        {
+            if (goal.IsCompleted())
+            {
+                completedGoals++;
+            }
+
+            if (goal is EternalGoal)
+            {
+                totalEternalEvents++;
+            }
+        }
+
+        double averagePoints = totalGoals > 0 ? (double)totalScore / totalGoals : 0;
+
+        Console.WriteLine($"Total Goals Created: {totalGoals}");
+        Console.WriteLine($"Total Goals Completed: {completedGoals}");
+        Console.WriteLine($"Total Events for Eternal Goals: {totalEternalEvents}");
+        Console.WriteLine($"Average Points per Goal: {averagePoints:F2}");
     }
 }
